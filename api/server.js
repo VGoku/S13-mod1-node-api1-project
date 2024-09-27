@@ -1,7 +1,37 @@
 // BUILD YOUR SERVER HERE
 const express = require("express");
 const User = require("./users/model")
+
 const server = express();
+server.use(express.json())
+
+// Root route
+// server.get("/", (req, res) => {
+//     res.send("Welcome to the API!"); // You can customize this message
+// });
+
+server.post("/api/users", (req, res) => {
+    const user = req.body;
+    if (!user.name || !user.bio) {
+        res.status(400).json({
+            message: "Please provide name and bio for the user"
+        })
+    } else {
+        User.insert(user)
+        .then(createdUser => {
+           
+            res.status(201).json(createdUser)
+              console.log(createdUser);
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "error creating users",
+                err: err.message,
+                stack: err.stack,
+            })
+        })
+    }
+})
 
 server.get("/api/users", (req, res) => {
     // console.log("getting all users");
