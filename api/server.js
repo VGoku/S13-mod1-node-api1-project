@@ -6,7 +6,8 @@ const server = express();
 server.use(express.json())
 
 server.delete("/api/users/:id", async (req, res) => {
-const possibleUser = await User.findById(req.params.id);
+try {
+    const possibleUser = await User.findById(req.params.id);
 // console.log("posssible user", possibleUser)
 if (!possibleUser) {
     res.status(404).json({
@@ -16,6 +17,13 @@ if (!possibleUser) {
     const deletedUser = await User.remove(possibleUser.id)
     res.status(200).json(deletedUser)
     // console.log(stuff);
+} 
+} catch (err) {
+    res.status(500).json({
+        message: "error creating user",
+        err: err.message,
+        stack: err.stack,
+    })
 }
 })
 
