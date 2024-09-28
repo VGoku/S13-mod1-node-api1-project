@@ -5,6 +5,20 @@ const User = require("./users/model")
 const server = express();
 server.use(express.json())
 
+server.delete("/api/users/:id", async (req, res) => {
+const possibleUser = await User.findById(req.params.id);
+// console.log("posssible user", possibleUser)
+if (!possibleUser) {
+    res.status(404).json({
+        message: "not found"
+    })
+} else {
+    const deletedUser = await User.remove(possibleUser.id)
+    res.status(200).json(deletedUser)
+    // console.log(stuff);
+}
+})
+
 // Root route
 // server.get("/", (req, res) => {
 //     res.send("Welcome to the API!"); // You can customize this message
