@@ -10,7 +10,7 @@ const possibleUser = await User.findById(req.params.id);
 // console.log("posssible user", possibleUser)
 if (!possibleUser) {
     res.status(404).json({
-        message: "not found"
+        message: "The user with the specified ID does not exist"
     })
 } else {
     const deletedUser = await User.remove(possibleUser.id)
